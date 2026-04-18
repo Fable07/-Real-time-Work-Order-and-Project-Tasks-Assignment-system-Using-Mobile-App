@@ -6,8 +6,8 @@ const protect = (req, res, next) => {
   if (token && token.startsWith("Bearer")) {
     try {
       token = token.split(" ")[1];
-      const decoded = jwt.verify(token, "SECRET_KEY");
-      req.user = decoded; // Dito nanggagaling ang req.user.id at req.user.role
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = decoded;
       next();
     } catch (error) {
       res.status(401).json({ message: "Not authorized, token failed" });
@@ -17,4 +17,19 @@ const protect = (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+// Role-based authorization middleware
+const authorize = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    if (!allowedRoles.includes(req.user.role)) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized for this action" });
+    }
+    next();
+  };
+};
+
+module.exports = { protect, authorize };

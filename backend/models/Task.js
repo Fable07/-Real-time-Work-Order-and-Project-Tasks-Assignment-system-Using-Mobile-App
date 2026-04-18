@@ -7,14 +7,26 @@ const TaskSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
-  }, // ID ng Manager/Supervisor
-  assignedByName: { type: String }, // Pangalan ni Admin
+  },
+  assignedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  assignedByName: { type: String },
   status: {
     type: String,
     enum: ["pending", "in-progress", "review", "completed"],
     default: "pending",
   },
+  priority: {
+    type: String,
+    enum: ["low", "medium", "high"],
+    default: "medium",
+  },
+  dueDate: { type: Date },
+  completedAt: { type: Date },
   createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Task", TaskSchema);

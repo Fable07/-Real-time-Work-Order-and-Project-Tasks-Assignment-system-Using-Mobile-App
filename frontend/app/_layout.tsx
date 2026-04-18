@@ -42,6 +42,9 @@ function RootLayoutNav() {
         case "admin":
           router.replace("/(admin)/dashboard");
           break;
+        case "hrd":
+          router.replace("/(hrd)/dashboard");
+          break;
         case "manager":
           router.replace("/(manager)/dashboard");
           break;
