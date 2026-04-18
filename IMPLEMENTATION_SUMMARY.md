@@ -1,6 +1,6 @@
 # Project Update Summary - Capstone2 (April 18, 2026)
 
-## 🎯 Overview
+## Overview
 
 Complete system overhaul implementing all recommendations for security hardening, HRD role implementation, and database model enhancements. The system now has proper RBAC, secure authentication, and a complete hierarchy of user roles for task management.
 
