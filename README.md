@@ -289,6 +289,93 @@ npm start
 # Check AsyncStorage: useAuth hook logs
 ```
 
+## 🆘 Troubleshooting
+
+### Login Issues (Invalid credentials / Server Error)
+
+**Problem**: Can't login to the app
+
+**Solution** (in order):
+1. **Verify backend is running**: Check if terminal shows `✅ Connected to MongoDB` and `✅ Server listening on port 5500`
+2. **Verify test users exist**: Run `node backend/seed-db.js`
+3. **Check MongoDB is running**: Run `mongod` in a new terminal
+4. **Verify .env file**: Check `backend/.env` has `PORT=5500` and `MONGO_URI` pointing to MongoDB
+5. **Test directly**: Use curl to test login endpoint
+
+**Detailed guide**: See [LOGIN_TROUBLESHOOTING.md](LOGIN_TROUBLESHOOTING.md)
+
+### Quick Diagnostic
+```bash
+# Run the diagnostic tool
+node diagnose-setup.js
+```
+
+This will check:
+- ✅ .env file configuration
+- ✅ Dependencies installed
+- ✅ Required files present
+- ✅ MongoDB URI valid
+- ✅ Database seeding setup
+
+### Common Issues by Error
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| "Invalid credentials" | No test users in database | `node backend/seed-db.js` |
+| "Cannot connect to server" | Backend not running | `npm start` in backend folder |
+| "Connection refused on 27017" | MongoDB not running | Start MongoDB: `mongod` |
+| "Schema hasn't been registered" | Models not imported | Restart backend: `npm start` |
+| "JWT error" | JWT_SECRET not in .env | Copy `.env.example` to `.env` |
+| "Cannot reach backend" | Wrong API URL | Check `frontend/constants/Config.ts` |
+
+### Setup on New Machine
+
+```bash
+# 1. Clone and install
+npm install --prefix backend
+npm install --prefix frontend
+
+# 2. Create .env
+cp backend/.env.example backend/.env
+# Edit backend/.env with your MongoDB URI
+
+# 3. Start MongoDB (choose one)
+# Option A: Local
+mongod
+
+# Option B: Docker
+docker run -d -p 27017:27017 mongo
+
+# 4. Start backend
+npm start --prefix backend
+
+# 5. Seed database
+cd backend && node seed-db.js
+
+# 6. Start frontend
+npm start --prefix frontend
+```
+
+### Database Issues
+
+**View users in database**:
+```bash
+mongosh
+use capstone2_db
+db.users.find()
+```
+
+**Clear and reseed database**:
+```bash
+mongosh
+use capstone2_db
+db.dropDatabase()
+exit
+
+# Then reseed:
+node backend/seed-db.js
+```
+
 ## 📞 Support
 
 For issues or questions:
